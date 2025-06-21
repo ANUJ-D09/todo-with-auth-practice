@@ -2,7 +2,6 @@ const express = require('express')
 const app = express()
 const port = 3069
 const jwt = require('jsonwebtoken');
-const { headers } = require('next/headers');
 const JWT_SECRET = "shreehari";
 
 app.use(express.json());
@@ -65,22 +64,23 @@ app.post('/post', function(req, res) {
     const newtodo = {
         id: todo.length + 1,
         task: req.body.task
-    }
+    };
     todo.push(newtodo);
 
-
-
-    res.json({ message: "operation sucessfull" })
-})
+    res.json({ message: "operation successful" });
+});
 app.put('/update', function(req, res) {
-    res.json({ message: "for update operation" })
+
 
 })
-app.delete('/delete', function(req, res) {
-
-    res.json({ message: "for Delete operation" })
-
-})
+app.delete('/delete/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    todo = todo.filter(t => t.id !== id);
+    res.json({
+        message: "Deleted",
+        remaining: todo
+    });
+});
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 })

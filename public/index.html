@@ -25,7 +25,7 @@
     </section>
 
     <section class="user info">
-        <h1>Todo</h1>
+
         <div id="todo"></div>
         <div id="button"></div>
         <div id="showtodo"></div>
@@ -74,7 +74,7 @@
         function todoacess() {
             document.getElementById("showtodo").innerHTML = '<button onclick="create()">Submit</button>';
             document.getElementById("todo").innerHTML = '<input type="text" id="task" placeholder="Enter task for todo">';
-            document.getElementById("button").innerHTML = '<button onclick="displaybettertodo()">Submit</button>';
+            document.getElementById("button").innerHTML = '<button onclick="displaybettertodo()">display task</button>';
         }
 
 
@@ -93,7 +93,6 @@
 
         function create() {
             try {
-
 
                 const task = document.getElementById("task").value;
                 axios.post("http://localhost:3069/post", {
@@ -116,7 +115,11 @@
 
         function deletetask() {
             const task = document.getElementById("task").value;
-            alert(`Task Submitted: ${task}`);
+            axios.delete(`http://localhost:3069/delete/2`, {
+                headers: {
+                    token: localStorage.getItem('token')
+                }
+            });
 
         }
     </script>
