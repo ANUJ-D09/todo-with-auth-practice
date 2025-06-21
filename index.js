@@ -48,6 +48,9 @@ app.get('/me', function(req, res) {
         res.json({ message: "notfound" });
     }
 })
+app.get('/', function(req, res) {
+    res.sendFile("/Users/anujdamani/Desktop/100xdevs/Todofullstack/public/index.html");
+})
 
 app.post('/post', function(req, res) {
 
