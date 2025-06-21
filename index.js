@@ -8,6 +8,11 @@ const JWT_SECRET = "shreehari";
 app.use(express.json());
 
 const users = [];
+let todo = [
+    { id: 1, task: "Learn JS" },
+    { id: 2, task: "Build project" }
+]
+
 app.post('/signup', function(req, res) {
     const username = req.body.username;
     const password = req.body.password;
@@ -34,6 +39,10 @@ app.post('/signin', function(req, res) {
     }
 
 })
+
+app.get('/todos', (req, res) => {
+    res.json(todo);
+});
 app.get('/me', function(req, res) {
 
     const token = req.headers['token'];
@@ -53,8 +62,15 @@ app.get('/', function(req, res) {
 })
 
 app.post('/post', function(req, res) {
+    const newtodo = {
+        id: todo.length + 1,
+        task: req.body.task
+    }
+    todo.push(newtodo);
 
-    res.json({ message: "for create operation" })
+
+
+    res.json({ message: "operation sucessfull" })
 })
 app.put('/update', function(req, res) {
     res.json({ message: "for update operation" })

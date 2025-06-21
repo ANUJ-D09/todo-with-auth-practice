@@ -11,64 +11,115 @@
 
 <body>
     <section class="signup">
-        <h1>signup</h1>
+        <h1>Signup</h1>
         <input type="text" id="signup_username" placeholder="signup_username">
         <input type="text" id="signup_password" placeholder="signup_password">
-        <button onclick=signup()>signup</button>
+        <button onclick="signup()">Signup</button>
     </section>
+
     <section class="signin">
-        <h1>signin</h1>
+        <h1>Signin</h1>
         <input type="text" id="signin_username" placeholder="signin_username">
         <input type="text" id="signin_password" placeholder="signin_password">
-        <button onclick=signin()>signin</button>
+        <button onclick="signin()">Signin</button>
     </section>
+
     <section class="user info">
-        <h1>todo</h1>
-        <div></div>
+        <h1>Todo</h1>
+        <div id="todo"></div>
+        <div id="button"></div>
+        <div id="showtodo"></div>
+        <div id="todovisible"></div>
     </section>
-</body>
-<script>
-    async function signup() {
-        try {
 
+    <script>
+        async function signup() {
+            try {
+                const username = document.getElementById("signup_username").value;
+                const password = document.getElementById("signup_password").value;
 
-            const username = document.getElementById("signup_username").value;
-            const password = document.getElementById("signup_password").value;
+                await axios.post("http://localhost:3069/signup", {
+                    username,
+                    password
+                });
 
-            await axios.post("http://localhost:3069/signup", {
-                username: username,
-                password: password
-            })
-            alert(
-                "signed up sucess"
-            );
-        } catch (error) {
-            alert(
-                "error"
-            );
+                alert("Signed up successfully!");
+            } catch (error) {
+                alert("Signup error!");
+            }
         }
 
-    }
-    async function signin() {
-        try {
-            const username = document.getElementById("signin_username").value;
-            const password = document.getElementById("signin_password").value;
-            const response = await axios.post("http://localhost:3069/signin", {
-                username: username,
-                password: password
-            })
-            alert(
-                "signed in sucess"
-            );
-            if (response.data.token) {
-                localStorage.setItem("token", response.data.token);
+        async function signin() {
+            try {
+                const username = document.getElementById("signin_username").value;
+                const password = document.getElementById("signin_password").value;
+
+                const response = await axios.post("http://localhost:3069/signin", {
+                    username,
+                    password
+                });
+
+                alert("Signed in successfully!");
+
+                if (response.data.token) {
+                    localStorage.setItem("token", response.data.token);
+                    todoacess();
+                }
+
+            } catch (error) {
+                alert("Signin error!");
+            }
+        }
+
+        function todoacess() {
+            document.getElementById("showtodo").innerHTML = '<button onclick="create()">Submit</button>';
+            document.getElementById("todo").innerHTML = '<input type="text" id="task" placeholder="Enter task for todo">';
+            document.getElementById("button").innerHTML = '<button onclick="displaybettertodo()">Submit</button>';
+        }
+
+
+
+        async function displaybettertodo() {
+            try {
+                const response = await axios.get("http://localhost:3069/todos");
+                const list = response.data;
+                const todoList = list.map(todo => `<li>${todo.task}</li>`).join("");
+                document.getElementById("todovisible").innerHTML = `<ul>${todoList}</ul>`;
+            } catch (error) {
+                alert("Error in fetching todos!");
+                document.getElementById("todovisible").innerHTML = '<div>error</div>';
+            }
+        }
+
+        function create() {
+            try {
+
+
+                const task = document.getElementById("task").value;
+                axios.post("http://localhost:3069/post", {
+                    task
+                })
+                alert("todoupdated");
+            } catch (error) {
+                alert("didt updated");
             }
 
-
-        } catch (error) {
-            alert("Signin error!");
         }
-    }
-</script>
+
+
+
+        function update() {
+            const task = document.getElementById("task").value;
+            alert(`Task Submitted: ${task}`);
+
+        }
+
+        function deletetask() {
+            const task = document.getElementById("task").value;
+            alert(`Task Submitted: ${task}`);
+
+        }
+    </script>
+</body>
 
 </html>
